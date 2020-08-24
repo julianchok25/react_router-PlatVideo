@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+// Including High order component
+import { withRouter } from "react-router";
+
 import "./header.css";
 import logo from "../../../images/logo.png";
 
 class Header extends Component {
+  handleClick = () => {
+    this.props.history.goBack();
+  };
   render() {
     return (
       <header className="Header">
@@ -33,6 +39,9 @@ class Header extends Component {
                 Perfil
               </NavLink>
             </li>
+            <li>
+              <a onClick={this.handleClick}>👈</a>
+            </li>
           </ul>
         </nav>
       </header>
@@ -40,4 +49,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
