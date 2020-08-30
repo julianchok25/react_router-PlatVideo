@@ -1,61 +1,18 @@
-import React, { Fragment } from "react";
-import { render } from "react-dom";
-import Videos from "../pages/containers/videos";
-import Home from "../pages/components/home";
-import NotFound from "../pages/components/notFound";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import reducer from "../reducers/index";
-import { Map as map } from "immutable";
-import logger from "redux-logger";
-import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
+import React from "react";
+import { hydrate } from "react-dom";
+import App from "../pages/containers/app";
 
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-
-import Header from "../pages/components/headers.js";
-// function logger({ getState, dispatch}) {
-//   return (next) => {
-//     return (action) => {
-//       console.log('este es mi viejo estado', getState().toJS())
-//       console.log('vamos a enviar está acción', action);
-//       const value = next(action)
-//       console.log('este es mi nuevo estado', getState().toJS())
-//       return value
-//     }
-//   }
-// }
-
-const logger_ = ({ getState, dispatch }) => (next) => (action) => {
-  console.log("este es mi viejo estado", getState().toJS());
-  console.log("vamos a enviar está acción", action);
-  const value = next(action);
-  console.log("este es mi nuevo estado", getState().toJS());
-  return value;
-};
-
-const store = createStore(
-  reducer,
-  map(),
-  composeWithDevTools(applyMiddleware(logger, thunk))
-);
+import { BrowserRouter } from "react-router-dom";
 
 const homeContainer = document.getElementById("home-container");
 
-render(
+// El método render se recomienda cuando se trabaja desde el cliente
+// Para el renderizado en el servidor, se recomienda otro método llamado hydrate, es menos
+// pesado porque ya parte del trabajo lo viene haciendo el server, no se tiene que re renderizar toda
+// la app, es para optimizar
+hydrate(
   <BrowserRouter>
-    <Provider store={store}>
-      <Fragment>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/videos" component={Videos} />
-          <Redirect from="/v" to="/videos" />
-          {/* Handling 404 Error */}
-          <Route component={NotFound} />
-        </Switch>
-      </Fragment>
-    </Provider>
+    <App />
   </BrowserRouter>,
   homeContainer
 );

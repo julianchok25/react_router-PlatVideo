@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
+import { withRouter } from "react-router";
 
 import "./generic-page.css";
 
-export default function NotFound(props) {
+function NotFound(props) {
   const handleBackClick = () => {
     // props.history.goBack();
     props.history.go(-1); //This is equivalent to before line
@@ -35,3 +36,5 @@ export default function NotFound(props) {
     </div>
   );
 }
+
+export default withRouter(NotFound);
